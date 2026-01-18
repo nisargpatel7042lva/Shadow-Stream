@@ -1,0 +1,21 @@
+{
+  "name": "@shadowstream/contracts",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "anchor build",
+    "test": "anchor test",
+    "deploy": "anchor deploy --provider.cluster devnet",
+    "clean": "anchor clean"
+  },
+  "devDependencies": {
+    "@coral-xyz/anchor": "^0.29.0",
+    "@solana/web3.js": "^1.87.6",
+    "@types/bn.js": "^5.1.0",
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^10.0.0",
+    "chai": "^4.3.0",
+    "mocha": "^10.2.0",
+    "ts-mocha": "^10.0.0",
+    "typescript": "^5.3.3"
+  }
+}

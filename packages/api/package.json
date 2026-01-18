@@ -1,0 +1,22 @@
+{
+  "name": "@shadowstream/api",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@shadowstream/database": "workspace:*",
+    "@shadowstream/sdk": "workspace:*",
+    "@trpc/server": "^10.45.0",
+    "next-auth": "^4.24.5",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
