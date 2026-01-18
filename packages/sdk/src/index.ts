@@ -1,4 +1,5 @@
 export * from './client'
 export * from './privacy/custom-zk'
+export * from './privacy/privacy-manager'
 export * from './solana/bulk-payment'
 export * from './types'

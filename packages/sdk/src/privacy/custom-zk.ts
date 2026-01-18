@@ -2,6 +2,7 @@ import { Keypair, PublicKey } from '@solana/web3.js'
 import { createHash } from 'crypto'
 import * as tweetnacl from 'tweetnacl'
 import type { EncryptedBatch, DecryptedPayment } from '../types'
+import { MerkleTree } from './merkle-proof'
 
 /**
  * Custom privacy implementation using:
@@ -114,25 +115,35 @@ export class CustomPrivacyService {
    * Build Merkle tree for batch verification
    */
   private buildMerkleTree(payments: any[]): string {
-    // Implement Merkle tree construction
-    // For MVP, return root hash
     const leaves = payments.map((p) => p.commitment)
-    return this.hashLeaves(leaves)
+    const tree = new MerkleTree(leaves)
+    return tree.getRoot()
   }
 
-  private hashLeaves(leaves: string[]): string {
-    if (leaves.length === 1) return leaves[0]
+  /**
+   * Generate Merkle proof for a specific payment
+   */
+  generateMerkleProof(
+    payments: Array<{ commitment: string }>,
+    paymentIndex: number
+  ): { proof: string[]; root: string } {
+    const leaves = payments.map((p) => p.commitment)
+    const tree = new MerkleTree(leaves)
+    const proof = tree.getProof(paymentIndex)
+    const root = tree.getRoot()
 
-    const newLeaves: string[] = []
-    for (let i = 0; i < leaves.length; i += 2) {
-      const left = leaves[i]
-      const right = leaves[i + 1] || left
-      const combined = createHash('sha256')
-        .update(left + right)
-        .digest('hex')
-      newLeaves.push(combined)
-    }
+    return { proof, root }
+  }
 
-    return this.hashLeaves(newLeaves)
+  /**
+   * Verify Merkle proof
+   */
+  verifyMerkleProof(
+    commitment: string,
+    proof: string[],
+    root: string
+  ): boolean {
+    const tree = new MerkleTree([commitment])
+    return tree.verifyProof(commitment, proof, root)
   }
 }

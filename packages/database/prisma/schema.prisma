@@ -10,4 +10,149 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Schema will be implemented in Phase 4
+// Core Models
+model User {
+  id            String   @id @default(cuid())
+  walletAddress String   @unique
+  name          String?
+  email         String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  organizations OrganizationMember[]
+  createdBatches PaymentBatch[]
+  payments      Payment[]
+}
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  vaultAddress String @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     OrganizationMember[]
+  batches     PaymentBatch[]
+  invoices    Invoice[]
+}
+
+model OrganizationMember {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  role           String   // OWNER, ADMIN, FINANCE, CONTRACTOR
+  canCreateBatch Boolean  @default(false)
+  canApproveBatch Boolean @default(false)
+  canExecuteBatch Boolean @default(false)
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model PaymentBatch {
+  id              String   @id @default(cuid())
+  organizationId  String
+  batchNumber     Int
+  title           String
+  description     String?
+  totalAmount     Decimal  @db.Decimal(20, 8)
+  recipientCount  Int
+  tokenMint       String?
+  isPrivate       Boolean  @default(true)
+  privacyProtocol String?  // custom-zk, light-protocol, arcium
+  status          String   // PENDING, APPROVED, EXECUTING, COMPLETED, FAILED, CANCELLED
+  signature       String?
+  createdAt       DateTime @default(now())
+  executedAt      DateTime?
+  scheduledFor    DateTime?
+  createdBy       String
+  approvedBy     String?
+  approvedAt      DateTime?
+
+  // Privacy fields
+  encryptedData   Json?    // Stores EncryptedBatch JSON
+  merkleRoot      String?  // Merkle root for batch verification
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  creator      User         @relation("CreatedBatches", fields: [createdBy], references: [id])
+  payments     Payment[]
+  approvals    BatchApproval[]
+
+  @@unique([organizationId, batchNumber])
+  @@index([organizationId, status])
+  @@index([createdBy])
+  @@index([signature])
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  batchId       String
+  recipientId   String   // Wallet address or user ID
+  amount        Decimal  @db.Decimal(20, 8)
+  tokenMint     String?
+  memo          String?
+  status        String   // PENDING, COMPLETED, FAILED
+  processedAt   DateTime?
+  createdAt     DateTime @default(now())
+
+  // Privacy fields
+  encryptedData String?  // Base64 encrypted data
+  nonce         String?  // Base64 nonce for decryption
+  commitment    String?  // Commitment hash stored on-chain
+
+  batch    PaymentBatch @relation(fields: [batchId], references: [id])
+  recipient User?       @relation(fields: [recipientId], references: [walletAddress])
+
+  @@index([batchId])
+  @@index([recipientId])
+  @@index([status])
+}
+
+model BatchApproval {
+  id        String   @id @default(cuid())
+  batchId   String
+  approverId String
+  approved  Boolean
+  comment   String?
+  createdAt DateTime @default(now())
+
+  batch PaymentBatch @relation(fields: [batchId], references: [id])
+
+  @@index([batchId])
+  @@index([approverId])
+}
+
+model Invoice {
+  id            String   @id @default(cuid())
+  organizationId String
+  title         String
+  amount        Decimal  @db.Decimal(20, 8)
+  status        String   // DRAFT, SENT, PAID, CANCELLED
+  dueDate       DateTime?
+  paidAt        DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId, status])
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String   // batch.created, batch.executed, etc.
+  entityType String  // PaymentBatch, Payment, etc.
+  entityId  String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
