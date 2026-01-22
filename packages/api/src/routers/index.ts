@@ -1,0 +1,6 @@
+export { paymentRouter } from './payment'
+export { organizationRouter } from './organization'
+export { invoiceRouter } from './invoice'
+export { userRouter } from './user'
+export { complianceRouter } from './compliance'
+export { privacyRouter } from './privacy'
