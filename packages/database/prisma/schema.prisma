@@ -20,8 +20,11 @@ model User {
   updatedAt     DateTime @updatedAt
 
   organizations OrganizationMember[]
-  createdBatches PaymentBatch[]
-  payments      Payment[]
+  createdBatches PaymentBatch[] @relation("CreatedBatches")
+  payments      Payment[] @relation("PaymentRecipient")
+
+  @@index([walletAddress])
+  @@index([email])
 }
 
 model Organization {
@@ -92,7 +95,7 @@ model PaymentBatch {
 model Payment {
   id            String   @id @default(cuid())
   batchId       String
-  recipientId   String   // Wallet address or user ID
+  recipientId   String   // Wallet address (can link to User via walletAddress)
   amount        Decimal  @db.Decimal(20, 8)
   tokenMint     String?
   memo          String?
@@ -105,12 +108,13 @@ model Payment {
   nonce         String?  // Base64 nonce for decryption
   commitment    String?  // Commitment hash stored on-chain
 
-  batch    PaymentBatch @relation(fields: [batchId], references: [id])
-  recipient User?       @relation(fields: [recipientId], references: [walletAddress])
+  batch    PaymentBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  recipient User?       @relation("PaymentRecipient", fields: [recipientId], references: [walletAddress])
 
   @@index([batchId])
   @@index([recipientId])
   @@index([status])
+  @@index([batchId, recipientId])
 }
 
 model BatchApproval {

@@ -160,6 +160,9 @@ importers:
       '@prisma/client':
         specifier: ^5.7.1
         version: 5.22.0(prisma@5.22.0)
+      '@solana/web3.js':
+        specifier: ^1.87.6
+        version: 1.98.4(typescript@5.9.3)
     devDependencies:
       prisma:
         specifier: ^5.7.1
