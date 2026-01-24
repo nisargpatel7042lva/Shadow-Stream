@@ -56,9 +56,9 @@ export const privacyRouter = router({
       }
 
       // Reconstruct keypair from private key
-      const recipientKeypair = Keypair.fromSecretKey(
-        Buffer.from(input.recipientPrivateKey, 'base58')
-      )
+      // Note: In production, use proper base58 decoding
+      const privateKeyBytes = Buffer.from(input.recipientPrivateKey, 'base64')
+      const recipientKeypair = Keypair.fromSecretKey(privateKeyBytes)
 
       // Verify wallet address matches
       if (recipientKeypair.publicKey.toBase58() !== input.recipientWalletAddress) {

@@ -43,9 +43,6 @@ export const complianceRouter = router({
           skip: 1,
         }),
         orderBy: { createdAt: 'desc' },
-        include: {
-          // Note: User relation would need to be added to ActivityLog model
-        },
       })
 
       let nextCursor: string | undefined

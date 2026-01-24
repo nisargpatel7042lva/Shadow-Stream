@@ -1,7 +1,11 @@
 # Dependencies
-node_modules
+node_modules/
 .pnp
 .pnp.js
+
+# pnpm
+.pnpm-store/
+.pnpm-debug.log*
 
 # Testing
 coverage
@@ -48,3 +52,12 @@ test-ledger/
 # Misc
 .turbo
 .cache
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Debug logs
+.cursor/debug.log

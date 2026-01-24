@@ -1,6 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { db } from '@shadowstream/database'
-import { getUserByWallet } from '@shadowstream/database/utils'
+import { db, getUserByWallet } from '@shadowstream/database'
 
 /**
  * Get user from wallet address (for wallet-based auth)

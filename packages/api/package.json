@@ -2,10 +2,24 @@
   "name": "@shadowstream/api",
   "version": "0.1.0",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./context": {
+      "import": "./dist/context.js",
+      "require": "./dist/context.js",
+      "types": "./dist/context.d.ts"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@shadowstream/database": "workspace:*",

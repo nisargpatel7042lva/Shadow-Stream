@@ -1,5 +1,4 @@
-import { db } from './index'
-import { Prisma } from '@prisma/client'
+import { db, Prisma } from './index'
 
 /**
  * Database utility functions
@@ -159,10 +158,16 @@ export async function logActivity(params: {
   action: string
   entityType: string
   entityId: string
-  metadata?: Prisma.JsonValue
+  metadata?: Prisma.InputJsonValue
 }) {
   return await db.activityLog.create({
-    data: params,
+    data: {
+      userId: params.userId,
+      action: params.action,
+      entityType: params.entityType,
+      entityId: params.entityId,
+      ...(params.metadata && { metadata: params.metadata }),
+    },
   })
 }
 

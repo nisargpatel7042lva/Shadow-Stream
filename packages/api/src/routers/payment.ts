@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { router, protectedProcedure } from '../trpc'
 import { TRPCError } from '@trpc/server'
 import { requirePermission, requireOrgMembership } from '../middleware/permission'
-import { getNextBatchNumber, logActivity } from '@shadowstream/database/utils'
+import { getNextBatchNumber, logActivity } from '@shadowstream/database'
 import { PublicKey, Keypair } from '@solana/web3.js'
 
 export const paymentRouter = router({

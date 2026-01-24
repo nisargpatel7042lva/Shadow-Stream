@@ -1,6 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { db } from '@shadowstream/database'
-import { checkPermission } from '@shadowstream/database/utils'
+import { db, checkPermission } from '@shadowstream/database'
 
 /**
  * Check if user has permission for an organization

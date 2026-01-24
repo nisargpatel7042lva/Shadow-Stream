@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { router, protectedProcedure, publicProcedure } from '../trpc'
 import { TRPCError } from '@trpc/server'
-import { getOrCreateUser, getUserByWallet } from '@shadowstream/database/utils'
+import { getOrCreateUser, getUserByWallet } from '@shadowstream/database'
 
 export const userRouter = router({
   /**

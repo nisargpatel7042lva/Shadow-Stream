@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { router, protectedProcedure } from '../trpc'
 import { TRPCError } from '@trpc/server'
 import { requireOrgMembership, requireOrgAdmin } from '../middleware/permission'
-import { getOrganizationStats } from '@shadowstream/database/utils'
+import { getOrganizationStats } from '@shadowstream/database'
 import { Keypair } from '@solana/web3.js'
 
 export const organizationRouter = router({
