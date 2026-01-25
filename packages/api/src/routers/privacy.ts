@@ -129,7 +129,7 @@ export const privacyRouter = router({
         })
       }
 
-      const payments = batch.payments.map((p) => ({
+      const payments = batch.payments.map((p: { commitment: string | null }) => ({
         commitment: p.commitment || '',
       }))
 

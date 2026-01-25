@@ -2,7 +2,9 @@
   "name": "@shadowstream/database",
   "version": "0.1.0",
   "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
+    "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",

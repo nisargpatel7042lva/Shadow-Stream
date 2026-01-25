@@ -29,7 +29,7 @@ export const complianceRouter = router({
         select: { userId: true },
       })
 
-      const memberIds = members.map((m) => m.userId)
+      const memberIds = members.map((m: { userId: string }) => m.userId)
 
       const logs = await ctx.db.activityLog.findMany({
         where: {
@@ -151,10 +151,15 @@ export const complianceRouter = router({
 
       // Calculate statistics
       const totalBatches = batches.length
-      const completedBatches = batches.filter((b) => b.status === 'COMPLETED').length
-      const totalAmount = batches.reduce((sum, b) => sum + Number(b.totalAmount), 0)
-      const totalPayments = batches.reduce((sum, b) => sum + b.payments.length, 0)
-      const privateBatches = batches.filter((b) => b.isPrivate).length
+      const completedBatches = batches.filter((b: any) => b.status === 'COMPLETED').length
+      const totalAmount = batches.reduce((sum: number, b: any) => {
+        const amount = typeof b.totalAmount === 'object' && b.totalAmount !== null 
+          ? Number(b.totalAmount.toString()) 
+          : Number(b.totalAmount)
+        return sum + amount
+      }, 0)
+      const totalPayments = batches.reduce((sum: number, b: any) => sum + (b.payments?.length || 0), 0)
+      const privateBatches = batches.filter((b: any) => b.isPrivate).length
 
       return {
         period: {
@@ -164,25 +169,30 @@ export const complianceRouter = router({
         statistics: {
           totalBatches,
           completedBatches,
-          pendingBatches: batches.filter((b) => b.status === 'PENDING').length,
-          cancelledBatches: batches.filter((b) => b.status === 'CANCELLED').length,
+          pendingBatches: batches.filter((b: any) => b.status === 'PENDING').length,
+          cancelledBatches: batches.filter((b: any) => b.status === 'CANCELLED').length,
           totalAmount,
           totalPayments,
           privateBatches,
           publicBatches: totalBatches - privateBatches,
         },
-        batches: batches.map((b) => ({
-          id: b.id,
-          batchNumber: b.batchNumber,
-          title: b.title,
-          status: b.status,
-          totalAmount: Number(b.totalAmount),
-          recipientCount: b.recipientCount,
-          isPrivate: b.isPrivate,
-          createdAt: b.createdAt,
-          executedAt: b.executedAt,
-          creator: b.creator,
-        })),
+        batches: batches.map((b: any) => {
+          const totalAmount = typeof b.totalAmount === 'object' && b.totalAmount !== null 
+            ? Number(b.totalAmount.toString()) 
+            : Number(b.totalAmount)
+          return {
+            id: b.id,
+            batchNumber: b.batchNumber,
+            title: b.title,
+            status: b.status,
+            totalAmount,
+            recipientCount: b.recipientCount,
+            isPrivate: b.isPrivate,
+            createdAt: b.createdAt,
+            executedAt: b.executedAt,
+            creator: b.creator,
+          }
+        }),
       }
     }),
 })

@@ -109,8 +109,8 @@ export const organizationRouter = router({
       orderBy: { createdAt: 'desc' },
     })
 
-    return memberships.map((m) => ({
-      ...m.organization,
+    return memberships.map((m: any) => ({
+      ...(m.organization as Record<string, any>),
       role: m.role,
       permissions: {
         canCreateBatch: m.canCreateBatch,

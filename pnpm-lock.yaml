@@ -120,6 +120,9 @@ importers:
       '@shadowstream/sdk':
         specifier: workspace:*
         version: link:../sdk
+      '@solana/web3.js':
+        specifier: ^1.87.6
+        version: 1.98.4(typescript@5.9.3)
       '@trpc/server':
         specifier: ^10.45.0
         version: 10.45.4

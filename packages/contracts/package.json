@@ -2,7 +2,7 @@
   "name": "@shadowstream/contracts",
   "version": "0.1.0",
   "scripts": {
-    "build": "anchor build",
+    "build": "bash build.sh",
     "test": "anchor test",
     "deploy": "anchor deploy --provider.cluster devnet",
     "clean": "anchor clean"

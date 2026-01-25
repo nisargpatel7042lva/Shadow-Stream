@@ -158,7 +158,7 @@ export async function logActivity(params: {
   action: string
   entityType: string
   entityId: string
-  metadata?: Prisma.InputJsonValue
+  metadata?: any
 }) {
   return await db.activityLog.create({
     data: {
