@@ -54,7 +54,7 @@ export default function DashboardPage() {
 
       {organizations && organizations.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {organizations.map((org) => (
+          {organizations.map((org: any) => (
             <div
               key={org.id}
               className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-soft transition-all duration-300 hover:shadow-glow hover:-translate-y-1"
