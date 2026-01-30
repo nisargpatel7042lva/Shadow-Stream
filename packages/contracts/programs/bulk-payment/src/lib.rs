@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("4FW6DdSzVG1V15MYJWBKqRvQccZQG2LtrLajYFma97ZQ");
+declare_id!("EsDigpm8edeaa7n6xxxUq5uL7mdkBJHgLKWpAqRbyjhC");
 
 #[program]
 pub mod bulk_payment {

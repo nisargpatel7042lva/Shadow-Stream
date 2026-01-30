@@ -76,8 +76,10 @@ export const paymentRouter = router({
       let merkleRoot = null
 
       if (input.isPrivate) {
-        // Get sender keypair (in production, get from session/wallet)
-        const senderKeypair = Keypair.generate() // TODO: Get from session
+        // Note: For demo purposes, generating a new keypair per batch
+        // In production, this should be derived from the user's wallet/session
+        // The sender keypair is used for encryption and can be different from the payer
+        const senderKeypair = Keypair.generate()
 
         const encrypted = await ctx.privacyService.encryptBatch({
           recipients: input.recipients.map((r) => ({

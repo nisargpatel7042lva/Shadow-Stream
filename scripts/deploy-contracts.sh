@@ -31,8 +31,19 @@ if (( $(echo "$BALANCE < 2.0" | bc -l) )); then
     solana airdrop 2
 fi
 
+# Delete Cargo.lock if it exists (to avoid version 4 incompatibility with Solana's Rust 1.75.0)
+echo "🧹 Cleaning Cargo.lock (if exists)..."
+rm -f Cargo.lock
+
+# Clear Cargo registry cache for constant_time_eq-0.4.2 (has corrupted edition2024 requirement)
+echo "🧹 Clearing corrupted Cargo registry cache..."
+rm -rf ~/.cargo/registry/src/index.crates.io-*/constant_time_eq-0.4.2 2>/dev/null || true
+rm -rf ~/.cargo/registry/cache/index.crates.io-*/constant_time_eq-0.4.2* 2>/dev/null || true
+
 # Build
 echo "🔨 Building contracts..."
+# Ensure we use Solana's cargo-build-sbf by setting PATH
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 anchor build
 
 # Get program ID from keypair

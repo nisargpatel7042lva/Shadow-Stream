@@ -2,6 +2,13 @@
 members = ["programs/*"]
 resolver = "2"
 
+# Pin constant_time_eq to version compatible with Rust 1.75.0 (Solana's Rust version)
+# Version 0.4.2 requires edition2024 which Rust 1.75.0 doesn't support
+# Solution: Use [patch.crates-io] to patch all constant_time_eq dependencies to 0.2.6
+# This works by patching the dependency before resolution
+[patch.crates-io]
+constant_time_eq = { git = "https://github.com/cesarb/constant_time_eq.git", tag = "0.2.6" }
+
 [profile.release]
 overflow-checks = true
 lto = "fat"

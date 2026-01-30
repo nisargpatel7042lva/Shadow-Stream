@@ -76,3 +76,32 @@ And Cargo.toml uses matching versions:
 anchor-lang = "0.32.1"
 anchor-spl = "0.32.1"
 ```
+
+### Error: "feature edition2024 is required" for constant_time_eq
+
+**Issue**: The `constant_time_eq` dependency version 0.4.2 requires Rust edition2024, but Solana's Rust 1.75.0 doesn't support it.
+
+**Solution**: This is already fixed in `Cargo.toml` using `[patch.crates-io]` to use version 0.2.6 from git. If you still encounter issues:
+
+1. Clear Cargo cache:
+   ```bash
+   rm -rf ~/.cargo/registry/src/index.crates.io-*/constant_time_eq-0.4.2
+   rm -rf ~/.cargo/registry/cache/index.crates.io-*/constant_time_eq-0.4.2*
+   rm -rf ~/.cargo/git/db/constant_time_eq-*
+   ```
+
+2. Remove Cargo.lock and rebuild:
+   ```bash
+   cd packages/contracts
+   rm -f Cargo.lock
+   anchor build
+   ```
+
+3. **Alternative**: Upgrade Solana to latest version with newer Rust support:
+   ```bash
+   sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+   export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+   solana-install init stable
+   ```
+
+**Note**: The build script (`build.sh`) gracefully handles build failures, so the monorepo build won't fail even if contracts can't build (useful for CI/CD environments where Anchor isn't available).

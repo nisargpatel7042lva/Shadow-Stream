@@ -44,6 +44,7 @@ lerna-debug.log*
 target/
 **/*.rs.bk
 test-ledger/
+Cargo.lock
 
 # Database
 *.db

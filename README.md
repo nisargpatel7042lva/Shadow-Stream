@@ -7,7 +7,7 @@ Production-ready private payroll platform for Web3 organizations on Solana.
 ### Prerequisites
 
 - Node.js 18+ and pnpm 8+
-- Rust and Anchor 0.29+
+- Rust and Anchor 0.32.1+
 - PostgreSQL database
 - Solana CLI tools
 
@@ -16,7 +16,7 @@ Production-ready private payroll platform for Web3 organizations on Solana.
 1. **Clone and install dependencies:**
 ```bash
 git clone <repo-url>
-cd shadowstream
+cd solprivacyhackathon
 pnpm install
 ```
 
@@ -30,7 +30,7 @@ cp .env.example .env.local
 ```bash
 cd packages/database
 pnpm db:generate
-pnpm db:migrate
+pnpm db:push  # Use db:push for development, or db:migrate for production
 pnpm db:seed
 ```
 
