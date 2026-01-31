@@ -88,7 +88,7 @@ export default function InvoicesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {invoices?.invoices.map((invoice) => (
+              {invoices?.invoices.map((invoice: any) => (
                 <tr key={invoice.id} className="hover:bg-gray-50 transition-colors">
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm font-semibold text-gray-900">

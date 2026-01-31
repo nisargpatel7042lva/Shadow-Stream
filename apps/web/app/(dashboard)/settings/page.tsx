@@ -74,11 +74,11 @@ export default function SettingsPage() {
         <div className="rounded-lg border border-gray-200 bg-white p-6">
           <h2 className="mb-4 text-lg font-semibold">Organizations</h2>
           <div className="space-y-2">
-            {user?._count.organizations === 0 ? (
+            {((user as any)?._count?.organizations ?? 0) === 0 ? (
               <p className="text-gray-500">No organizations</p>
             ) : (
               <p className="text-gray-600">
-                Member of {user?._count.organizations} organization(s)
+                Member of {(user as any)?._count?.organizations ?? 0} organization(s)
               </p>
             )}
           </div>

@@ -39,7 +39,7 @@ export default function CreatePaymentPage() {
   }
 
   const removeRecipient = (index: number) => {
-    setRecipients(recipients.filter((_, i) => i !== index))
+    setRecipients(recipients.filter((_: any, i: number) => i !== index))
   }
 
   const updateRecipient = (index: number, field: string, value: string) => {
@@ -57,8 +57,8 @@ export default function CreatePaymentPage() {
     }
 
     const validRecipients = recipients
-      .filter((r) => r.walletAddress && r.amount)
-      .map((r) => ({
+      .filter((r: any) => r.walletAddress && r.amount)
+      .map((r: any) => ({
         walletAddress: r.walletAddress,
         amount: parseFloat(r.amount),
         memo: r.memo || undefined,
@@ -99,7 +99,7 @@ export default function CreatePaymentPage() {
             required
           >
             <option value="">Select an organization</option>
-            {organizations?.map((org) => (
+            {organizations?.map((org: any) => (
               <option key={org.id} value={org.id}>
                 {org.name}
               </option>
@@ -176,7 +176,7 @@ export default function CreatePaymentPage() {
           </div>
 
           <div className="space-y-4">
-            {recipients.map((recipient, index) => (
+            {recipients.map((recipient: any, index: number) => (
               <div
                 key={index}
                 className="rounded-lg border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-5 transition-all hover:border-indigo-300 hover:shadow-sm"

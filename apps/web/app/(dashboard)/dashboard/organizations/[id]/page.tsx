@@ -91,7 +91,7 @@ export default function OrganizationPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {batches?.batches.map((batch) => (
+              {batches?.batches.map((batch: any) => (
                 <tr key={batch.id}>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm font-medium text-gray-900">
