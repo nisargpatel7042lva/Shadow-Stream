@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-bulk_payment = "sHQsmdYgDXm7P7uqc5Ct6MPNJPLT4amArrjnS1z5KBu"
+bulk_payment = "NSgS295Sq4DnVLCuxmZd2vTJGdB2QgWjMd8K7P88CwB"
 
 [registry]
 url = "https://api.apr.dev"
