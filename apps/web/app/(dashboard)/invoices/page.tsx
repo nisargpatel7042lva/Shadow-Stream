@@ -12,7 +12,7 @@ export default function InvoicesPage() {
   const { data: organizations } = trpc.organization.list.useQuery()
   const { data: invoices, isLoading } = trpc.invoice.list.useQuery(
     {
-      organizationId: selectedOrg || (organizations?.[0]?.id ?? ''),
+      organizationId: selectedOrg || ((organizations?.[0] as any)?.id ?? ''),
     },
     { enabled: !!organizations && organizations.length > 0 }
   )
@@ -46,11 +46,11 @@ export default function InvoicesPage() {
             Filter by Organization
           </label>
           <select
-            value={selectedOrg || organizations[0]?.id}
+            value={selectedOrg || ((organizations[0] as any)?.id ?? '')}
             onChange={(e) => setSelectedOrg(e.target.value)}
             className="block w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
           >
-            {organizations.map((org) => (
+            {organizations.map((org: any) => (
               <option key={org.id} value={org.id}>
                 {org.name}
               </option>
