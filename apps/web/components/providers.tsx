@@ -18,10 +18,10 @@ function WalletSyncProvider({ children }: { children: React.ReactNode }) {
     },
   }))
 
-  // Create tRPC client that reads wallet address dynamically
-  const trpcClient = useMemo(() => createTrpcClient(), [])
-
-  // Sync wallet address to tRPC client immediately when wallet connects
+  // Set wallet address synchronously before creating client
+  const walletAddress = connected && publicKey ? publicKey.toBase58() : null
+  
+  // Sync wallet address immediately when wallet connects/disconnects
   useEffect(() => {
     if (connected && publicKey) {
       const address = publicKey.toBase58()
@@ -32,6 +32,19 @@ function WalletSyncProvider({ children }: { children: React.ReactNode }) {
       console.log('[WalletSync] Wallet disconnected')
     }
   }, [publicKey, connected])
+
+  // Recreate tRPC client when wallet address changes to ensure headers are updated
+  // Set wallet address synchronously before creating client to avoid race conditions
+  const trpcClient = useMemo(() => {
+    // Set wallet address synchronously before creating client
+    if (walletAddress) {
+      setWalletAddress(walletAddress)
+    } else {
+      setWalletAddress(null)
+    }
+    console.log('[WalletSync] Creating tRPC client, wallet:', walletAddress || 'disconnected')
+    return createTrpcClient()
+  }, [walletAddress])
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

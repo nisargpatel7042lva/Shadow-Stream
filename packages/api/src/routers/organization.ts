@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { router, protectedProcedure } from '../trpc'
+import { router, protectedProcedure, publicProcedure } from '../trpc'
 import { TRPCError } from '@trpc/server'
 import { requireOrgMembership, requireOrgAdmin } from '../middleware/permission'
 import { getOrganizationStats } from '@shadowstream/database'
@@ -88,37 +88,64 @@ export const organizationRouter = router({
 
   /**
    * List user's organizations
+   * Works with session or wallet address for demo purposes
    */
-  list: protectedProcedure.query(async ({ ctx }) => {
-    const userId = ctx.session!.user.id
+  list: publicProcedure
+    .input(
+      z.object({
+        walletAddress: z.string().regex(/^[1-9A-HJ-NP-Za-km-z]{32,44}$/).optional(),
+      }).optional()
+    )
+    .query(async ({ ctx, input }) => {
+      // Try to get userId from session first
+      let userId: string | undefined = ctx.session?.user?.id
+      
+      // If no session but wallet address provided, find user by wallet address
+      if (!userId) {
+        const walletAddress = input?.walletAddress || ctx.session?.user?.walletAddress
+        if (walletAddress) {
+          const user = await ctx.db.user.findUnique({
+            where: { walletAddress },
+          })
+          if (user) {
+            userId = user.id
+            console.log('[Organization.list] Found user by wallet address:', userId)
+          }
+        }
+      }
 
-    const memberships = await ctx.db.organizationMember.findMany({
-      where: { userId },
-      include: {
-        organization: {
-          include: {
-            _count: {
-              select: {
-                batches: true,
-                members: true,
+      if (!userId) {
+        console.warn('[Organization.list] No userId found, returning empty array')
+        return []
+      }
+
+      const memberships = await ctx.db.organizationMember.findMany({
+        where: { userId },
+        include: {
+          organization: {
+            include: {
+              _count: {
+                select: {
+                  batches: true,
+                  members: true,
+                },
               },
             },
           },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    })
+        orderBy: { createdAt: 'desc' },
+      })
 
-    return memberships.map((m: any) => ({
-      ...(m.organization as Record<string, any>),
-      role: m.role,
-      permissions: {
-        canCreateBatch: m.canCreateBatch,
-        canApproveBatch: m.canApproveBatch,
-        canExecuteBatch: m.canExecuteBatch,
-      },
-    }))
-  }),
+      return memberships.map((m: any) => ({
+        ...(m.organization as Record<string, any>),
+        role: m.role,
+        permissions: {
+          canCreateBatch: m.canCreateBatch,
+          canApproveBatch: m.canApproveBatch,
+          canExecuteBatch: m.canExecuteBatch,
+        },
+      }))
+    }),
 
   /**
    * Get organization statistics

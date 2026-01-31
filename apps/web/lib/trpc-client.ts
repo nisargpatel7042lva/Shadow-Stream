@@ -20,15 +20,34 @@ export function createTrpcClient() {
     links: [
       httpBatchLink({
         url: '/api/trpc',
-        headers: () => {
+        fetch: async (url, options) => {
           const walletAddress = getWalletAddress()
-          const headers: Record<string, string> = {}
           
+          // Start with existing headers from options
+          const headers = new Headers(options?.headers)
+          
+          // Always add wallet address header if available
           if (walletAddress) {
-            headers['x-wallet-address'] = walletAddress
+            headers.set('x-wallet-address', walletAddress)
+            console.log('[tRPC] ✅ Adding wallet address header:', walletAddress, 'to URL:', url)
+          } else {
+            console.error('[tRPC] ❌ No wallet address available! Current value:', walletAddress)
+            console.error('[tRPC] ❌ This will cause authentication to fail!')
           }
           
-          return headers
+          // Log all headers being sent (for debugging)
+          console.log('[tRPC] Request headers:', Object.fromEntries(headers.entries()))
+          
+          // Call fetch with updated headers
+          const response = await fetch(url, {
+            ...options,
+            headers,
+          })
+          
+          // Log response status
+          console.log('[tRPC] Response status:', response.status, 'for URL:', url)
+          
+          return response
         },
       }),
     ],

@@ -10,7 +10,7 @@ import { Building2, Plus, ArrowRight, Shield, Zap, Users } from 'lucide-react'
 export default function DashboardPage() {
   const { publicKey, connected } = useWallet()
   const { data: organizations, isLoading } = trpc.organization.list.useQuery(
-    undefined,
+    { walletAddress: publicKey?.toBase58() },
     { enabled: !!publicKey }
   )
 

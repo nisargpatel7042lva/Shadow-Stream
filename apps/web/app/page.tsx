@@ -46,9 +46,9 @@ export default function Home() {
         
         {/* Content Overlay */}
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-32 z-10 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - Text Content */}
-            <div className="text-left space-y-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Text Content */}
+            <div className="text-center space-y-8">
               <div className="inline-flex items-center rounded-full border border-primary/30 bg-background-card/80 backdrop-blur-sm px-4 py-2 text-sm font-medium text-primary glass animate-fade-in">
                 <Shield className="mr-2 h-4 w-4" />
                 Privacy-First Payroll Platform
@@ -58,11 +58,11 @@ export default function Home() {
                 Private Payments for Web3 Organizations
               </h1>
               
-              <p className="text-xl text-foreground-muted leading-relaxed max-w-xl animate-fade-in-up animate-delay-200">
+              <p className="text-xl text-foreground-muted leading-relaxed max-w-2xl mx-auto animate-fade-in-up animate-delay-200">
                 ShadowStream enables secure, compliant batch payments on Solana while keeping payment amounts private. Built for organizations that value both transparency and confidentiality.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up animate-delay-300">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animate-delay-300">
                 {connected ? (
                   <Link href="/dashboard">
                     <Button size="lg" className="group">
@@ -81,7 +81,7 @@ export default function Home() {
               </div>
 
               {/* Key Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border-light animate-fade-in-up animate-delay-400">
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border-light max-w-2xl mx-auto animate-fade-in-up animate-delay-400">
                 <div>
                   <div className="text-2xl font-display font-bold text-primary">50+</div>
                   <div className="text-sm text-foreground-muted mt-1">Payments per Batch</div>
@@ -94,23 +94,6 @@ export default function Home() {
                   <div className="text-2xl font-display font-bold text-primary">ZK</div>
                   <div className="text-sm text-foreground-muted mt-1">Zero-Knowledge Proofs</div>
                 </div>
-              </div>
-            </div>
-
-            {/* Right Column - Visual Element */}
-            <div className="relative h-[600px] hidden lg:block animate-fade-in-up animate-delay-200">
-              <div className="absolute inset-0 rounded-2xl overflow-hidden border border-border-light bg-background-card/50 backdrop-blur-sm">
-                <Prism
-                  animationType="rotate"
-                  timeScale={0.5}
-                  height={3.5}
-                  baseWidth={5.5}
-                  scale={3.6}
-                  hueShift={0}
-                  colorFrequency={1}
-                  noise={0}
-                  glow={1}
-                />
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useWallet } from '@solana/wallet-adapter-react'
 import { trpc } from '../../../lib/trpc'
 import { Button } from '../../../components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card'
@@ -9,8 +10,12 @@ import { FileText, Plus, CheckCircle, Clock, XCircle, Building2 } from 'lucide-r
 import Link from 'next/link'
 
 export default function InvoicesPage() {
+  const { publicKey } = useWallet()
   const [selectedOrg, setSelectedOrg] = useState<string>('')
-  const { data: organizations } = trpc.organization.list.useQuery()
+  const { data: organizations } = trpc.organization.list.useQuery(
+    { walletAddress: publicKey?.toBase58() },
+    { enabled: !!publicKey }
+  )
   const { data: invoices, isLoading } = trpc.invoice.list.useQuery(
     {
       organizationId: selectedOrg || ((organizations?.[0] as any)?.id ?? ''),

@@ -22,7 +22,10 @@ export default function CreatePaymentPage() {
   ])
   const [isPrivate, setIsPrivate] = useState(true)
 
-  const { data: organizations } = trpc.organization.list.useQuery()
+  const { data: organizations } = trpc.organization.list.useQuery(
+    { walletAddress: publicKey?.toBase58() },
+    { enabled: !!publicKey }
+  )
   const createBatch = trpc.payment.createBatch.useMutation({
     onSuccess: (data) => {
       toast.success('Payment batch created successfully!')
