@@ -226,7 +226,7 @@ export default function PaymentBatchPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {batch.payments.map((payment, index) => (
+              {batch.payments.map((payment: any, index: number) => (
                 <tr key={payment.id} className="hover:bg-gray-50 transition-colors">
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center">
