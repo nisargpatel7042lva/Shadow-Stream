@@ -77,3 +77,22 @@ shadowstream/
 ## License
 
 MIT
+
+## 🏆 Hackathon Submission
+
+This project is submitted for the Solana Privacy Hackathon. See the following resources:
+
+- **[Submission Checklist](./SUBMISSION_CHECKLIST.md)** - Complete verification of all submission requirements
+- **[Demo Video Guide](./DEMO_GUIDE.md)** - Script and guide for creating the demo video
+
+### Submission Requirements Status
+
+✅ **Open Source** - MIT License  
+✅ **Solana Integration** - Anchor program deployed on devnet  
+✅ **Privacy Technology** - Custom encryption (NaCl Box) + Merkle commitments  
+⚠️ **Deployment** - Verification needed (see checklist)  
+📹 **Demo Video** - Guide ready, video pending  
+✅ **Documentation** - Comprehensive docs included  
+
+**Program ID:** `EsDigpm8edeaa7n6xxxUq5uL7mdkBJHgLKWpAqRbyjhC` (Devnet)  
+**Explorer:** [View on Solana Explorer](https://explorer.solana.com/address/EsDigpm8edeaa7n6xxxUq5uL7mdkBJHgLKWpAqRbyjhC?cluster=devnet)

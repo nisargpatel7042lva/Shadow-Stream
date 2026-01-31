@@ -12,12 +12,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          'inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
+          'inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
           {
-            'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl': variant === 'default',
-            'border-2 border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400': variant === 'outline',
-            'text-gray-700 hover:bg-gray-100': variant === 'ghost',
-            'bg-red-600 text-white hover:bg-red-700 shadow-lg hover:shadow-xl': variant === 'destructive',
+            'bg-primary text-background shadow-lg hover:bg-primary-dark hover:shadow-glow-lg': variant === 'default',
+            'border-2 border-border-light bg-background-card text-foreground hover:border-primary hover:bg-background-elevated': variant === 'outline',
+            'text-foreground-muted hover:text-foreground hover:bg-background-elevated': variant === 'ghost',
+            'bg-error text-background hover:bg-red-500 shadow-lg hover:shadow-glow': variant === 'destructive',
             'h-10 px-4 py-2 text-sm': size === 'default',
             'h-9 px-3 text-xs': size === 'sm',
             'h-12 px-8 text-base': size === 'lg',

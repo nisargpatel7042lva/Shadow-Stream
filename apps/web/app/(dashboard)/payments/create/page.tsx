@@ -5,7 +5,8 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { trpc } from '../../../../lib/trpc'
 import { Button } from '../../../../components/ui/button'
-import { ArrowRight } from 'lucide-react'
+import { Card, CardHeader, CardTitle, CardContent } from '../../../../components/ui/card'
+import { ArrowRight, Plus, X, Building2, FileText, Lock, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function CreatePaymentPage() {
@@ -79,176 +80,211 @@ export default function CreatePaymentPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Create Payment Batch</h1>
-        <p className="text-lg text-gray-600">
+    <div className="mx-auto max-w-5xl space-y-6">
+      <div className="animate-fade-in-up">
+        <h1 className="text-4xl font-display font-bold text-foreground mb-2">Create Payment Batch</h1>
+        <p className="text-lg text-foreground-muted">
           Create a new batch payment for your organization
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <label className="block text-sm font-semibold text-gray-900 mb-2">
-            Organization *
-          </label>
-          <select
-            value={orgId || ''}
-            onChange={(e) => router.push(`/payments/create?org=${e.target.value}`)}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-            required
-          >
-            <option value="">Select an organization</option>
-            {organizations?.map((org: any) => (
-              <option key={org.id} value={org.id}>
-                {org.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <label className="block text-sm font-semibold text-gray-900 mb-2">
-            Title *
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-            placeholder="e.g., Monthly Payroll - January 2024"
-            required
-          />
-        </div>
-
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <label className="block text-sm font-semibold text-gray-900 mb-2">
-            Description
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-            placeholder="Optional description for this payment batch"
-          />
-        </div>
-
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <div className="flex items-start">
-            <input
-              type="checkbox"
-              id="isPrivate"
-              checked={isPrivate}
-              onChange={(e) => setIsPrivate(e.target.checked)}
-              className="mt-1 h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-            />
-            <div className="ml-3">
-              <label htmlFor="isPrivate" className="text-sm font-semibold text-gray-900">
-                Private Payment
-              </label>
-              <p className="text-sm text-gray-600 mt-1">
-                Encrypt payment amounts off-chain. Only commitment hashes will be stored on-chain, keeping amounts private while maintaining verifiability.
-              </p>
+        <Card className="animate-fade-in-up animate-delay-100">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30 text-primary">
+                <Building2 className="h-5 w-5" />
+              </div>
+              <CardTitle>Organization</CardTitle>
             </div>
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <label className="block text-sm font-semibold text-gray-900">
-                Recipients *
-              </label>
-              <p className="text-sm text-gray-600 mt-1">
-                Add up to 50 recipients for this batch
-              </p>
-            </div>
-            <Button 
-              type="button" 
-              onClick={addRecipient} 
-              size="sm" 
-              variant="outline"
-              disabled={recipients.length >= 50}
+          </CardHeader>
+          <CardContent>
+            <select
+              value={orgId || ''}
+              onChange={(e) => router.push(`/payments/create?org=${e.target.value}`)}
+              className="block w-full rounded-xl border border-border-light bg-background-card px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+              required
             >
-              Add Recipient
-            </Button>
-          </div>
+              <option value="">Select an organization</option>
+              {organizations?.map((org: any) => (
+                <option key={org.id} value={org.id}>
+                  {org.name}
+                </option>
+              ))}
+            </select>
+          </CardContent>
+        </Card>
 
-          <div className="space-y-4">
-            {recipients.map((recipient: any, index: number) => (
-              <div
-                key={index}
-                className="rounded-lg border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-5 transition-all hover:border-indigo-300 hover:shadow-sm"
-              >
-                <div className="mb-3 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-gray-500">
-                    Recipient #{index + 1}
-                  </span>
-                  {recipients.length > 1 && (
-                    <Button
-                      type="button"
-                      onClick={() => removeRecipient(index)}
-                      variant="destructive"
-                      size="sm"
-                    >
-                      Remove
-                    </Button>
-                  )}
+        <Card className="animate-fade-in-up animate-delay-100">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 border border-accent/30 text-accent">
+                <FileText className="h-5 w-5" />
+              </div>
+              <CardTitle>Batch Details</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Title *
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="block w-full rounded-xl border border-border-light bg-background-card px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+                placeholder="e.g., Monthly Payroll - January 2024"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Description
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                className="block w-full rounded-xl border border-border-light bg-background-card px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors resize-none"
+                placeholder="Optional description for this payment batch"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="animate-fade-in-up animate-delay-200">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/20 border border-success/30 text-success">
+                <Lock className="h-5 w-5" />
+              </div>
+              <CardTitle>Privacy Settings</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="isPrivate"
+                checked={isPrivate}
+                onChange={(e) => setIsPrivate(e.target.checked)}
+                className="mt-1 h-5 w-5 rounded border-border-light bg-background-card text-primary focus:ring-primary/20"
+              />
+              <div className="flex-1">
+                <label htmlFor="isPrivate" className="text-sm font-medium text-foreground block mb-1">
+                  Private Payment
+                </label>
+                <p className="text-sm text-foreground-muted">
+                  Encrypt payment amounts off-chain. Only commitment hashes will be stored on-chain, keeping amounts private while maintaining verifiability.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="animate-fade-in-up animate-delay-300">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary/20 border border-secondary/30 text-secondary">
+                  <Users className="h-5 w-5" />
                 </div>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Wallet Address *
-                    </label>
-                    <input
-                      type="text"
-                      value={recipient.walletAddress}
-                      onChange={(e) =>
-                        updateRecipient(index, 'walletAddress', e.target.value)
-                      }
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-                      placeholder="Enter Solana wallet address"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Amount (SOL) *
-                    </label>
-                    <input
-                      type="number"
-                      step="0.00000001"
-                      value={recipient.amount}
-                      onChange={(e) =>
-                        updateRecipient(index, 'amount', e.target.value)
-                      }
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-                      placeholder="0.00"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Memo (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      value={recipient.memo}
-                      onChange={(e) =>
-                        updateRecipient(index, 'memo', e.target.value)
-                      }
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-                      placeholder="Payment memo"
-                    />
-                  </div>
+                <div>
+                  <CardTitle>Recipients</CardTitle>
+                  <p className="text-sm text-foreground-muted mt-1">
+                    Add up to 50 recipients for this batch
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+              <Button 
+                type="button" 
+                onClick={addRecipient} 
+                size="sm"
+                disabled={recipients.length >= 50}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Recipient
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recipients.map((recipient: any, index: number) => (
+                <div
+                  key={index}
+                  className="rounded-xl border border-border-light bg-background-elevated p-5 transition-all hover:border-primary/50"
+                >
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className="text-xs font-semibold text-foreground-muted">
+                      Recipient #{index + 1}
+                    </span>
+                    {recipients.length > 1 && (
+                      <Button
+                        type="button"
+                        onClick={() => removeRecipient(index)}
+                        variant="destructive"
+                        size="sm"
+                      >
+                        <X className="h-4 w-4 mr-1" />
+                        Remove
+                      </Button>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div>
+                      <label className="block text-xs font-medium text-foreground mb-1">
+                        Wallet Address *
+                      </label>
+                      <input
+                        type="text"
+                        value={recipient.walletAddress}
+                        onChange={(e) =>
+                          updateRecipient(index, 'walletAddress', e.target.value)
+                        }
+                        className="block w-full rounded-lg border border-border-light bg-background-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+                        placeholder="Enter Solana wallet address"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-foreground mb-1">
+                        Amount (SOL) *
+                      </label>
+                      <input
+                        type="number"
+                        step="0.00000001"
+                        value={recipient.amount}
+                        onChange={(e) =>
+                          updateRecipient(index, 'amount', e.target.value)
+                        }
+                        className="block w-full rounded-lg border border-border-light bg-background-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+                        placeholder="0.00"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-foreground mb-1">
+                        Memo (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        value={recipient.memo}
+                        onChange={(e) =>
+                          updateRecipient(index, 'memo', e.target.value)
+                        }
+                        className="block w-full rounded-lg border border-border-light bg-background-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+                        placeholder="Payment memo"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+        <div className="flex justify-end space-x-4 pt-4 border-t border-border-light">
           <Button
             type="button"
             variant="outline"
@@ -265,7 +301,7 @@ export default function CreatePaymentPage() {
           >
             {createBatch.isPending ? (
               <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></div>
                 <span className="ml-2">Creating...</span>
               </>
             ) : (

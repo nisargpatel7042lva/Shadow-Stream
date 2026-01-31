@@ -17,10 +17,10 @@ export default function DashboardPage() {
   if (!connected) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-center">
-          <Shield className="mx-auto h-16 w-16 text-indigo-600 mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to ShadowStream</h1>
-          <p className="text-gray-600 mb-6">Please connect your wallet to continue</p>
+        <div className="text-center animate-fade-in-up">
+          <Shield className="mx-auto h-16 w-16 text-primary mb-4" />
+          <h1 className="text-3xl font-display font-bold text-foreground mb-2">Welcome to ShadowStream</h1>
+          <p className="text-foreground-muted mb-6">Please connect your wallet to continue</p>
         </div>
       </div>
     )
@@ -36,10 +36,10 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fade-in-up">
         <div>
-          <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
-          <p className="mt-2 text-lg text-gray-600">
+          <h1 className="text-4xl font-display font-bold text-foreground">Dashboard</h1>
+          <p className="mt-2 text-lg text-foreground-muted">
             Manage your organizations and payment batches
           </p>
         </div>
@@ -54,29 +54,30 @@ export default function DashboardPage() {
 
       {organizations && organizations.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {organizations.map((org: any) => (
+          {organizations.map((org: any, index: number) => (
             <div
               key={org.id}
-              className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-soft transition-all duration-300 hover:shadow-glow hover:-translate-y-1"
+              className="group relative overflow-hidden rounded-2xl border border-border-light bg-background-card p-6 card-hover animate-fade-in-up"
+              style={{ animationDelay: `${(index + 1) * 0.1}s` }}
             >
-              <div className="absolute top-0 right-0 h-32 w-32 bg-gradient-to-br from-indigo-100 to-purple-100 opacity-50 blur-3xl"></div>
+              <div className="absolute top-0 right-0 h-32 w-32 bg-primary/10 rounded-full blur-3xl"></div>
               <div className="relative">
                 <div className="mb-4 flex items-center justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-background shadow-glow">
                     <Building2 className="h-6 w-6" />
                   </div>
-                  <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+                  <span className="rounded-full bg-primary/20 border border-primary/30 px-3 py-1 text-xs font-semibold text-primary">
                     {org.role}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{org.name}</h3>
-                <div className="mb-4 flex items-center gap-4 text-sm text-gray-600">
+                <h3 className="text-xl font-display font-bold text-foreground mb-2">{org.name}</h3>
+                <div className="mb-4 flex items-center gap-4 text-sm text-foreground-muted">
                   <div className="flex items-center">
-                    <Zap className="mr-1 h-4 w-4" />
+                    <Zap className="mr-1 h-4 w-4 text-primary" />
                     {org._count?.batches || 0} batches
                   </div>
                   <div className="flex items-center">
-                    <Users className="mr-1 h-4 w-4" />
+                    <Users className="mr-1 h-4 w-4 text-accent" />
                     {org._count?.members || 0} members
                   </div>
                 </div>
@@ -97,10 +98,10 @@ export default function DashboardPage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
-          <Building2 className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No organizations yet</h3>
-          <p className="text-gray-600 mb-6">
+        <div className="rounded-2xl border-2 border-dashed border-border-light bg-background-card p-12 text-center animate-fade-in-up">
+          <Building2 className="mx-auto h-16 w-16 text-foreground-muted mb-4" />
+          <h3 className="text-xl font-display font-semibold text-foreground mb-2">No organizations yet</h3>
+          <p className="text-foreground-muted mb-6">
             Create your first organization to start making private payments
           </p>
           <Link href="/dashboard/organizations/create">

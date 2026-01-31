@@ -2,10 +2,10 @@
 members = ["programs/*"]
 resolver = "2"
 
-# Pin constant_time_eq to version compatible with Rust 1.75.0 (Solana's Rust version)
-# Version 0.4.2 requires edition2024 which Rust 1.75.0 doesn't support
-# Solution: Use [patch.crates-io] to patch all constant_time_eq dependencies to 0.2.6
-# This works by patching the dependency before resolution
+# Pin dependencies to versions compatible with Rust 1.75.0 (Solana's Rust version)
+# constant_time_eq v0.4.2 requires edition2024 which Rust 1.75.0 doesn't support
+# indexmap v2.13.0 requires Rust 1.82+ features, but Rust 1.75.0 doesn't support them
+# Solution: Use [patch.crates-io] to patch dependencies to compatible versions
 [patch.crates-io]
 constant_time_eq = { git = "https://github.com/cesarb/constant_time_eq.git", tag = "0.2.6" }
 

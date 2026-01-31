@@ -77,6 +77,25 @@ anchor-lang = "0.32.1"
 anchor-spl = "0.32.1"
 ```
 
+### Error: "package `toml_parser` requires rustc 1.76 or newer"
+
+**Issue**: The `toml_parser` dependency (build-time dependency from cargo) requires Rust 1.76+, but Solana's Rust 1.75.0 doesn't support it.
+
+**Solution**: Update Solana toolchain to latest stable version:
+```bash
+sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+solana-install init stable
+```
+
+Then rebuild:
+```bash
+cd packages/contracts
+rm -f Cargo.lock
+anchor clean
+anchor build
+```
+
 ### Error: "feature edition2024 is required" for constant_time_eq
 
 **Issue**: The `constant_time_eq` dependency version 0.4.2 requires Rust edition2024, but Solana's Rust 1.75.0 doesn't support it.
