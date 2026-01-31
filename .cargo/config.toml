@@ -1,2 +1,5 @@
 [unstable]
 next-lockfile-bump = true
+
+[target.bpfel-unknown-unknown]
+rustflags = ["-C", "link-arg=-z", "-C", "link-arg=notext"]
