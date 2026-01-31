@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { trpc } from '../../../../lib/trpc'
 import { Button } from '../../../../components/ui/button'
 import { LoadingSpinner } from '../../../../components/ui/loading'
-import { CheckCircle, XCircle, Clock, Shield, ArrowLeft } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, Shield, ArrowLeft, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
 
